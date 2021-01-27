@@ -17,12 +17,13 @@ class Application(tk.Frame):
 
     def get_paste_buffer(self):
         cl.OpenClipboard(0)
+        cfHtml = cl.RegisterClipboardFormat("HTML Format")
         try:
-            result = cl.GetClipboardData()
+            result = cl.GetClipboardData(cfHtml)
         except TypeError:
-            result = ''  #non-text
+            result = 'unknown'  #non-text
         cl.CloseClipboard()
-        print(result)
+        print(result.decode("utf-8", errors="ignore"))
         # return result
 
 root = tk.Tk()
