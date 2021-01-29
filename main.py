@@ -4,7 +4,7 @@ import win32clipboard as cl
 import sys
 
 class Application(tk.Frame):
-    def __init__(self, master=None):
+    def __init__(self, master = None):
         super().__init__(master)
         self.master = master
         self.pack()
@@ -26,12 +26,12 @@ class Application(tk.Frame):
         except TypeError:
             result = 'unknown'  #non-text
         cl.CloseClipboard()
-        print(result.decode("utf-8", errors="ignore"))
+        print(result.decode("utf-8", errors = "ignore"))
         self.textArea.insert(tk.END, result.decode("utf-8", errors = "ignore"))
         # return result
 
 root = tk.Tk()
-app = Application(master=root)
 root.title("Clipboard To Markdown Converter")
 root.geometry("800x800")
+app = Application(master = root)
 app.mainloop()
