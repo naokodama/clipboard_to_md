@@ -11,10 +11,10 @@ class Application(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.get_clip = tk.Button(self)
-        self.get_clip["text"] = "Start Convert"
-        self.get_clip["command"] = self.get_paste_buffer
-        self.get_clip.pack(side="top")
+        self.btnClipToHtml = tk.Button(self)
+        self.btnClipToHtml["text"] = "Start Convert"
+        self.btnClipToHtml["command"] = self.get_paste_buffer
+        self.btnClipToHtml.pack(fill = "x", padx = 20, pady = 20, side="left")
         self.textArea = ScrolledText(self, font = ("", 10), height = 40, width = 80)
         self.textArea.pack(fill=tk.BOTH, padx = 20, pady = 40)
 
