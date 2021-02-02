@@ -2,6 +2,15 @@ import tkinter as tk
 from tkinter.scrolledtext import ScrolledText
 import win32clipboard as cl
 import sys
+import re
+
+def replaceStringToHtmlFormat(orgText):
+    newText = re.sub(r"^\r|\n\r|\n", r"", orgText)
+    return newText
+
+def getTableItem(htmlText):
+    tableItem = re.sub(r"(<TABLE[\s\S\r\n\r\n]*?</TABLE>)", r"\1", htmlText)
+    return tableItem
 
 class Application(tk.Frame):
     def __init__(self, master = None):
@@ -26,8 +35,18 @@ class Application(tk.Frame):
         except TypeError:
             result = 'unknown'  #non-text
         cl.CloseClipboard()
+        print("decode start")
         print(result.decode("utf-8", errors = "ignore"))
-        self.textArea.insert(tk.END, result.decode("utf-8", errors = "ignore"))
+        print("decode end")
+        newText = replaceStringToHtmlFormat(result.decode("utf-8", errors = "ignore"))
+        print("newText start")
+        print(newText)
+        print("newText end")
+        tableItem = getTableItem(newText)
+        print("tableItem start")
+        print(tableItem)
+        print("tableItem end")
+        self.textArea.insert(tk.END, tableItem)
         # return result
 
 root = tk.Tk()
