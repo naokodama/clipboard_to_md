@@ -29,47 +29,28 @@ def delete_tag_area(html_text):
 def get_table_row_data_list(html_text):
     pattern = re.compile(r"<TR[\s\S]*?</TR>")
     match_list = pattern.findall(html_text)
-    print("row_match_list")
-    for match in match_list:
-        print("rowdata")
-        print(match)
-        break
     return match_list
 
 def get_table_col_data_list(html_text):
     pattern = re.compile(r"(<TD[\s\S]*?</TD>)")
     match_list = pattern.findall(html_text)
-    print("col_match_list")
-    print(match_list)
-    for match in match_list:
-        print("coldata")
-        print(match)
-        break
     return match_list
 
 def generate_markdown_table_text(html_text):
     markdown_text = ""
-    print(html_text)
     new_text = delete_crlf_code_from_top(html_text)
-    print("new_text")
-    print(new_text)
     table_tag_area = get_table_item(new_text)
     table_row_list = get_table_row_data_list(table_tag_area)
     row_count = 0
     for table_row_data in table_row_list:
         row_text = "|"
         row_data = table_row_data
-        print("row_data")
-        print(row_data)
         table_col_list = get_table_col_data_list(row_data)
         col_count = 0
         for col_data in table_col_list:
             data = col_data
-            print("data")
-            print(data)
             data = delete_crlf_and_tab(data)
             data = delete_tag_area(data)
-            print("col_count : " + str(col_count) + " | table_col_list :" + str(len(table_col_list)))
             if col_count == len(table_col_list) - 1:
                 row_text = row_text + data + "|\n"
             else:
@@ -93,7 +74,6 @@ def get_paste_buffer():
         result = "unknown"  #non-text
     cl.CloseClipboard()
     result = result.decode("utf-8", errors = "ignore")
-    print(result)
     return result
 
 class Application(tk.Frame):
@@ -124,8 +104,6 @@ class Application(tk.Frame):
             html_text = get_table_item(html_text)
         else:
             html_text = ""
-        print("html_text")
-        print(html_text)
         self.text_area.delete("1.0", tk.END)
         self.text_area.insert(tk.END, html_text)
     def get_markdown_text(self):
@@ -134,11 +112,8 @@ class Application(tk.Frame):
             markdown_text = generate_markdown_table_text(clipboard_text)
         else:
             markdown_text = ""
-        print("markdown_text")
-        print(markdown_text)
         self.text_area.delete("1.0", tk.END)
         self.text_area.insert(tk.END, markdown_text)
-        # return result
 
 root = tk.Tk()
 root.title("Clipboard To Markdown Converter")
