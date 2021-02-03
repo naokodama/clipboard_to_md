@@ -73,7 +73,8 @@ def get_paste_buffer():
     except TypeError:
         result = "unknown"  #non-text
     cl.CloseClipboard()
-    result = result.decode("utf-8", errors = "ignore")
+    if result != "unknown":
+        result = result.decode("utf-8", errors = "ignore")
     return result
 
 class Application(tk.Frame):
@@ -106,6 +107,7 @@ class Application(tk.Frame):
             html_text = ""
         self.text_area.delete("1.0", tk.END)
         self.text_area.insert(tk.END, html_text)
+
     def get_markdown_text(self):
         clipboard_text = get_paste_buffer()
         if clipboard_text != "unknown":
