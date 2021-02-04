@@ -32,9 +32,20 @@ def get_table_row_data_list(html_text):
     return match_list
 
 def get_table_col_data_list(html_text):
-    pattern = re.compile(r"(<TD[\s\S]*?</TD>)")
+    pattern = re.compile(r"<TD[\s\S]*?</TD>")
     match_list = pattern.findall(html_text)
     return match_list
+
+def delete_font_tag(html_text):
+    pattern = re.compile(r"<FONT[\s\S]*?>([\s\S]*?)</FONT>")
+    new_text = ""
+    if pattern.search(html_text):
+        print("match!")
+        new_text = re.sub(pattern, r"\1", html_text)
+        new_text = delete_font_tag(new_text)
+    else:
+        new_text = html_text
+    return new_text
 
 def generate_markdown_table_text(html_text):
     markdown_text = ""
@@ -103,6 +114,7 @@ class Application(tk.Frame):
         if clipboard_text != "unknown":
             html_text = delete_crlf_code_from_top(clipboard_text)
             html_text = get_table_item(html_text)
+            html_text = delete_font_tag(html_text)
         else:
             html_text = ""
         self.text_area.delete("1.0", tk.END)
