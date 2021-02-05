@@ -50,6 +50,13 @@ def delete_font_tag(html_text):
         new_text = html_text
     return new_text
 
+def delete_border_style(html_text):
+    border_ptn = re.compile(r"BORDER=\S+\s*")
+    border_color_ptn = re.compile(r"BORDERCOLOR=\S+\s*")
+    new_text = re.sub(border_ptn, r"", html_text)
+    new_text = re.sub(border_color_ptn, r"", new_text)
+    return new_text
+
 def generate_markdown_table_text(html_text):
     markdown_text = ""
     new_text = delete_crlf_code_from_top(html_text)
@@ -119,6 +126,7 @@ class Application(tk.Frame):
             html_text = get_table_item(html_text)
             html_text = delete_font_tag(html_text)
             html_text = change_tab_to_space4(html_text)
+            html_text = delete_border_style(html_text)
         else:
             html_text = ""
         self.text_area.delete("1.0", tk.END)
