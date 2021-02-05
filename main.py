@@ -50,6 +50,16 @@ def delete_font_tag(html_text):
         new_text = html_text
     return new_text
 
+def delete_span_tag(html_text):
+    pattern = re.compile(r"<SPAN[\s\S]*?>([\s\S]*?)</SPAN>")
+    new_text = ""
+    if pattern.search(html_text):
+        new_text = re.sub(pattern, r"\1", html_text)
+        new_text = delete_font_tag(new_text)
+    else:
+        new_text = html_text
+    return new_text
+
 def delete_border_style(html_text):
     border_ptn = re.compile(r"BORDER=\S+\s*")
     border_color_ptn = re.compile(r"BORDERCOLOR=\S+\s*")
@@ -125,6 +135,7 @@ class Application(tk.Frame):
             html_text = delete_crlf_code_from_top(clipboard_text)
             html_text = get_table_item(html_text)
             html_text = delete_font_tag(html_text)
+            html_text = delete_span_tag(html_text)
             html_text = change_tab_to_space4(html_text)
             html_text = delete_border_style(html_text)
         else:
