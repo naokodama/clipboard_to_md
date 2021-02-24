@@ -36,7 +36,7 @@ def get_table_row_data_list(html_text):
     return match_list
 
 def get_table_col_data_list(html_text):
-    pattern = re.compile(r"<TD[\s\S]*?</TD>")
+    pattern = re.compile(r"<TD[\s\S]*?</TD>|<TH[\s\S]*?</TH>")
     match_list = pattern.findall(html_text)
     return match_list
 
