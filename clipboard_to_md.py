@@ -5,7 +5,7 @@ import sys
 import re
 
 def delete_crlf_code_from_top(original_text):
-    new_text = re.sub(r"^\r|\n\r|\n", r"", original_text)
+    new_text = re.sub(r"^[\n\r]+", "", original_text, flags=re.MULTILINE)
     return new_text
 
 def change_tab_to_space4(original_text):
@@ -17,7 +17,7 @@ def delete_crlf_and_tab(original_text):
     return new_text
 
 def get_table_item(html_text):
-    pattern = re.compile(r"(<TABLE[\s\S]*?</TABLE>)")
+    pattern = re.compile(r"(<TABLE[\s\S]*?</TABLE>)", flags=re.IGNORECASE)
     match = pattern.search(html_text)
     if match:
         result = match.group()
@@ -31,17 +31,17 @@ def delete_tag_area(html_text):
     return new_text
 
 def get_table_row_data_list(html_text):
-    pattern = re.compile(r"<TR[\s\S]*?</TR>")
+    pattern = re.compile(r"<TR[\s\S]*?</TR>", flags=re.IGNORECASE)
     match_list = pattern.findall(html_text)
     return match_list
 
 def get_table_col_data_list(html_text):
-    pattern = re.compile(r"<TD[\s\S]*?</TD>|<TH[\s\S]*?</TH>")
+    pattern = re.compile(r"<TD[\s\S]*?</TD>|<TH[\s\S]*?</TH>", flags=re.IGNORECASE)
     match_list = pattern.findall(html_text)
     return match_list
 
 def delete_font_tag(html_text):
-    pattern = re.compile(r"<FONT[\s\S]*?>([\s\S]*?)</FONT>")
+    pattern = re.compile(r"<FONT[\s\S]*?>([\s\S]*?)</FONT>", flags=re.IGNORECASE)
     new_text = ""
     if pattern.search(html_text):
         new_text = re.sub(pattern, r"\1", html_text)
@@ -51,7 +51,7 @@ def delete_font_tag(html_text):
     return new_text
 
 def delete_span_tag(html_text):
-    pattern = re.compile(r"<SPAN[\s\S]*?>([\s\S]*?)</SPAN>")
+    pattern = re.compile(r"<SPAN[\s\S]*?>([\s\S]*?)</SPAN>", flags=re.IGNORECASE)
     new_text = ""
     if pattern.search(html_text):
         new_text = re.sub(pattern, r"\1", html_text)
@@ -61,14 +61,14 @@ def delete_span_tag(html_text):
     return new_text
 
 def delete_border_style(html_text):
-    border_ptn = re.compile(r"BORDER=\S+\s*")
-    border_color_ptn = re.compile(r"BORDERCOLOR=\S+\s*")
+    border_ptn = re.compile(r"BORDER=\S+\s*", flags=re.IGNORECASE)
+    border_color_ptn = re.compile(r"BORDERCOLOR=\S+\s*", flags=re.IGNORECASE)
     new_text = re.sub(border_ptn, r"", html_text)
     new_text = re.sub(border_color_ptn, r"", new_text)
     return new_text
 
 def generate_markdown_table_text(html_text):
-    markdown_text = ""
+    markdown_text = ":::: {.hgl .th-grey}\n"
     new_text = delete_crlf_code_from_top(html_text)
     table_tag_area = get_table_item(new_text)
     table_row_list = get_table_row_data_list(table_tag_area)
@@ -94,7 +94,7 @@ def generate_markdown_table_text(html_text):
             row_text = row_text + header_line + "-|\n"
         markdown_text = markdown_text + row_text
         row_count += 1
-    return markdown_text
+    return markdown_text + "::::\n"
 
 def get_paste_buffer():
     cl.OpenClipboard(0)
